@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f9;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+    }
+    .navbar h1 {
+      margin: 0;
+    }
+    .navbar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+    .navbar ul li {
+      margin: 0 10px;
+    }
+    .navbar ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    .navbar ul li a:hover {
+      text-decoration: underline;
+    }
+    .content {
+      padding: 20px;
+    }
+    .card {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card h2 {
+      margin-top: 0;
+    }
+    .hidden {
+      display: none;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .form-group button {
+      padding: 10px 15px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .form-group button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <h1>Admin Dashboard</h1>
+    <ul>
+      <li><a href="#" data-section="resident">Resident Information</a></li>
+      <li><a href="#" data-section="operations">Barangay Operations</a></li>
+      <li><a href="#" data-section="reports">Reports</a></li>
+      <li><a href="#" data-section="settings">Settings</a></li>
+    </ul>
+  </nav>
+
+  <div class="content">
+    <div class="card" id="resident">
+      <h2>Resident Information</h2>
+      <form id="residentForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" required>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <input type="text" id="gender" name="gender" required>
+        </div>
+        <div class="form-group">
+          <label for="birthdate">Birthdate</label>
+          <input type="date" id="birthdate" name="birthdate" required>
+        </div>
+        <div class="form-group">
+          <label for="birthplace">Birthplace</label>
+          <input type="text" id="birthplace" name="birthplace" required>
+        </div>
+        <div class="form-group">
+          <label for="cellNo">Cell No#</label>
+          <input type="text" id="cellNo" name="cellNo" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <button type="submit">Save</button>
+        </div>
+      </form>
+      <h3>Saved Residents</h3>
+      <ul id="residentList"></ul>
+    </div>
+
+    <div class="card hidden" id="operations">
+      <h2>Barangay Operations</h2>
+      <form id="announcementForm">
+        <div class="form-group">
+          <label for="announcement">New Announcement</label>
+          <textarea id="announcement" name="announcement" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit">Post Announcement</button>
+        </div>
+      </form>
+      <h3>Announcements</h3>
+      <ul id="announcementList"></ul>
+    </div>
+
+    <div class="card hidden" id="reports">
+      <h2>Reports</h2>
+      <form id="reportForm">
+        <div class="form-group">
+          <label for="reportTitle">Report Title</label>
+          <input type="text" id="reportTitle" name="reportTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="reportContent">Report Content</label>
+          <textarea id="reportContent" name="reportContent" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit">Add Report</button>
+        </div>
+      </form>
+      <h3>Saved Reports</h3>
+      <ul id="reportList"></ul>
+    </div>    
+  </div>
+
+  <script>
+    // JavaScript functionality for dynamic interactions
+    const links = document.querySelectorAll('.navbar ul li a');
+    const sections = document.querySelectorAll('.card');
+
+    links.forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault(); // Prevent default link behavior
+
+        // Hide all sections
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Show the selected section
+        const targetId = link.getAttribute('data-section');
+        document.getElementById(targetId).classList.remove('hidden');
+      });
+    });
+
+    // Functionality to store resident information
+    const residentForm = document.getElementById('residentForm');
+    const residentList = document.getElementById('residentList');
+
+    residentForm.addEventListener('submit', event => {
+      event.preventDefault(); // Prevent form submission
+
+      // Get form values
+      const name = document.getElementById('name').value;
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const birthdate = document.getElementById('birthdate').value;
+      const birthplace = document.getElementById('birthplace').value;
+      const cellNo = document.getElementById('cellNo').value;
+      const email = document.getElementById('email').value;
+
+      // Create a new list item
+      const listItem = document.createElement('li');
+      listItem.textContent = `Name: ${name}, Age: ${age}, Gender: ${gender}, Birthdate: ${birthdate}, Birthplace: ${birthplace}, Cell No#: ${cellNo}, Email: ${email}`;
+
+      // Add the list item to the resident list
+      residentList.appendChild(listItem);
+
+      // Clear the form
+      residentForm.reset();
+    });
+
+    // Functionality to post announcements
+    const announcementForm = document.getElementById('announcementForm');
+    const announcementList = document.getElementById('announcementList');
+
+    announcementForm.addEventListener('submit', event => {
+      event.preventDefault(); // Prevent form submission
+
+      // Get announcement text
+      const announcement = document.getElementById('announcement').value;
+
+      // Create a new list item
+      const listItem = document.createElement('li');
+      listItem.textContent = announcement;
+
+      // Add the list item to the announcement list
+      announcementList.appendChild(listItem);
+
+      // Clear the form
+      announcementForm.reset();
+    });
+    // Functionality to add and display reports
+const reportForm = document.getElementById('reportForm');
+const reportList = document.getElementById('reportList');
+
+reportForm.addEventListener('submit', event => {
+  event.preventDefault(); // Prevent form submission
+
+  // Get form values
+  const reportTitle = document.getElementById('reportTitle').value;
+  const reportContent = document.getElementById('reportContent').value;
+
+  // Create a new list item
+  const listItem = document.createElement('li');
+  listItem.innerHTML = `<strong>${reportTitle}</strong>: ${reportContent}`;
+
+  // Add the list item to the report list
+  reportList.appendChild(listItem);
+
+  // Clear the form
+  reportForm.reset();
+});
+  </script>
+</body>
+</html>
